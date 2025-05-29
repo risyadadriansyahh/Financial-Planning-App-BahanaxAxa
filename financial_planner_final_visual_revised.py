@@ -120,12 +120,12 @@ with tab2:
     
     # Display the annual equivalent
     pengeluaran_tahunan_pensiun = target_pengeluaran * 12
-    st.markdown(f"📅 Pengeluaran Tahunan Saat Pensiun: **Rp{pengeluaran_tahunan_pensiun:,.0f}**")
+    st.markdown(f"📅 Target Pengeluaran Tahunan Saat Pensiun: **Rp{pengeluaran_tahunan_pensiun:,.0f}**")
     
     # Inflation-adjusted future value of annual expense
     inflasi = st.number_input("Asumsi Inflasi (p.a)", value=5.0) / 100
     fv_pengeluaran = pengeluaran_tahunan_pensiun * ((1 + inflasi) ** masa_akumulasi)
-    st.markdown(f"### 📈 Nilai masa depan pengeluaran pensiun (FV): **Rp{fv_pengeluaran:,.0f}**")
+    st.markdown(f"### 📈 Nilai masa depan target pengeluaran pensiun (FV): **Rp{fv_pengeluaran:,.0f}**")
 
     inflasi_pensiun = st.number_input("Inflasi saat pensiun (p.a)", value=5.0) / 100
     return_pensiun = st.number_input("Return saat pensiun (p.a)", value=0.0) / 100
