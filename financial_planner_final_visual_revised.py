@@ -96,13 +96,14 @@ with tab2:
     else:
         pvad = fv_pengeluaran * (((1 - (1 + real_return) ** -masa_pensiun) / real_return) * (1 + real_return))
 
-    st.markdown(f"""
-    <div style='border:3px solid #d32f2f;padding:20px;border-radius:10px;margin:20px 0;background-color:#ffecec;'>
-    <h4>📦 Jumlah total kapital yang dibutuhkan saat pensiun:</h4>
-    <h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>
-    <p><i>Anda perlu menyiapkan dana ini untuk mempertahankan gaya hidup pensiun Anda.</i></p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        f"<div style='border:3px solid #d32f2f;padding:20px;border-radius:10px;margin:20px 0;background-color:#ffecec;'>"
+        f"<h4>📦 Jumlah total kapital yang dibutuhkan saat pensiun:</h4>"
+        f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
+        f"<p><i>Anda perlu menyiapkan dana ini untuk mempertahankan gaya hidup pensiun Anda.</i></p>"
+        f"</div>",
+        unsafe_allow_html=True
+    )
 
 # ----------------------
 # Tab 3: Investment Strategy
@@ -129,12 +130,13 @@ with tab3:
     }))
 
     deficit = max(pvad - total_fv, 0)
-    st.markdown(f"""
-    <div style='border:3px solid #f57c00;padding:20px;border-radius:10px;margin:20px 0;background-color:#fff3e0;'>
-    <h4>❗ Defisit yang harus dialokasikan:</h4>
-    <h2 style='color:#f57c00;'>Rp{deficit:,.0f}</h2>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        f"<div style='border:3px solid #f57c00;padding:20px;border-radius:10px;margin:20px 0;background-color:#fff3e0;'>"
+        f"<h4>❗ Defisit yang harus dialokasikan:</h4>"
+        f"<h2 style='color:#f57c00;'>Rp{deficit:,.0f}</h2>"
+        f"</div>",
+        unsafe_allow_html=True
+    )
 
     st.markdown("### 📊 Simulasi Alokasi Investasi Bulanan")
 
@@ -151,15 +153,12 @@ with tab3:
         weighted_return = np.dot(df_alloc["Imbal Hasil (%)"], df_alloc["Alokasi (%)"]) / 100
         r_monthly = weighted_return / 100 / 12
         n_months = masa_akumulasi * 12
-        if r_monthly == 0:
-            pmt = deficit / n_months
-        else:
-            pmt = (deficit * r_monthly) / (((1 + r_monthly) ** n_months - 1) * (1 + r_monthly))
+        pmt = deficit / n_months if r_monthly == 0 else (deficit * r_monthly) / (((1 + r_monthly) ** n_months - 1) * (1 + r_monthly))
 
-        st.markdown(f"""
-        <div style='border:3px solid #388e3c;padding:20px;border-radius:10px;margin:20px 0;background-color:#e8f5e9;'>
-        <h4>✅ Dengan return gabungan {weighted_return:.2f}%, Anda perlu menabung:</h4>
-        <h2 style='color:#388e3c;'>Rp{pmt:,.0f} / bulan</h2>
-        </div>
-        """, unsafe_allow_html=True)
-""")
+        st.markdown(
+            f"<div style='border:3px solid #388e3c;padding:20px;border-radius:10px;margin:20px 0;background-color:#e8f5e9;'>"
+            f"<h4>✅ Dengan return gabungan {weighted_return:.2f}%, Anda perlu menabung:</h4>"
+            f"<h2 style='color:#388e3c;'>Rp{pmt:,.0f} / bulan</h2>"
+            f"</div>",
+            unsafe_allow_html=True
+        )
