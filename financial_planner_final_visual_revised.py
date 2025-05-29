@@ -107,13 +107,24 @@ with tab2:
     usia_skrg = col1.number_input("Usia saat ini", value=34)
     usia_pensiun = col2.number_input("Usia pensiun", value=55)
     usia_meninggal = col3.number_input("Harapan hidup", value=75)
+    
     masa_pensiun = usia_meninggal - usia_pensiun
     masa_akumulasi = usia_pensiun - usia_skrg
-
-    target_pengeluaran = st.number_input("Target Pengeluaran Saat Pensiun (IDR)", value=int(pengeluaran_tahunan_input * 0.7))
+    
+    col4, col5 = st.columns(2)
+    col4.markdown(f"🧓 Masa pensiun: **{masa_pensiun} tahun**")
+    col5.markdown(f"📈 Masa akumulasi: **{masa_akumulasi} tahun**")
+    
+    # User-defined expected monthly expense in retirement
+    target_pengeluaran = st.number_input("Target Pengeluaran Bulanan Saat Pensiun (IDR)", value=int(pengeluaran_bulanan_input * 0.7))
+    
+    # Display the annual equivalent
+    pengeluaran_tahunan_pensiun = target_pengeluaran * 12
+    st.markdown(f"📅 Pengeluaran Tahunan Saat Pensiun: **Rp{pengeluaran_tahunan_pensiun:,.0f}**")
+    
+    # Inflation-adjusted future value of annual expense
     inflasi = st.number_input("Asumsi Inflasi (p.a)", value=5.0) / 100
-    fv_pengeluaran = target_pengeluaran * ((1 + inflasi) ** masa_akumulasi)
-
+    fv_pengeluaran = pengeluaran_tahunan_pensiun * ((1 + inflasi) ** masa_akumulasi)
     st.markdown(f"### 📈 Nilai masa depan pengeluaran pensiun (FV): **Rp{fv_pengeluaran:,.0f}**")
 
     inflasi_pensiun = st.number_input("Inflasi saat pensiun (p.a)", value=5.0) / 100
