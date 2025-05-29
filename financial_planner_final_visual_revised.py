@@ -16,37 +16,37 @@ with tab1:
     st.markdown("### 📌 Input Rincian Pengeluaran Bulanan dan Take Home Pay")
     take_home = st.number_input("💰 Take Home Pay Bulanan (IDR)", value=40_000_000, step=100_000)
 
-    pengeluaran_bulanan_input = st.number_input("📌 Pengeluaran Bulanan Saat Ini (Manual)", value=6_250_000, step=100_000)
-    pengeluaran_tahunan_input = pengeluaran_bulanan_input * 12
-    st.write(f"📌 Pengeluaran Tahunan Saat Ini: **Rp{pengeluaran_tahunan_input:,.0f}**")
-
     left_col, right_col = st.columns([2, 1])
     with left_col:
-        st.subheader("📂 List Kebutuhan")
-        kebutuhan_data = {
-            "No": list(range(1, 15)),
-            "List Kebutuhan": [
-                "Sewa rumah atau cicilan KPR", "Listrik, air, dan gas", "Makanan pokok dan kebutuhan dapur",
-                "Gaji PRT/ Baby Sitter/ Driver/ Satpam", "Transportasi (bensin, ongkos, servis kendaraan)",
-                "Asuransi kesehatan dan jiwa", "Biaya pendidikan anak/ sendiri", "Biaya Les anak",
-                "Jajan anak", "Tagihan telepon dan internet", "Obat-obatan", "Cicilan kartu kredit",
-                "Iuran lingkungan", "Perlengkapan rumah tangga"
-            ],
-            "Nominal (IDR)": [8_000_000, 800_000, 3_000_000, 2_000_000, 1_500_000, 500_000,
-                              400_000, 500_000, 600_000, 200_000, 0, 0, 0, 3_000_000]
-        }
-        df_kebutuhan = st.data_editor(pd.DataFrame(kebutuhan_data), num_rows="fixed")
+    st.subheader("📂 List Kebutuhan")
+    kebutuhan_data = {
+        "No": list(range(1, 15)),
+        "List Kebutuhan": [
+            "Sewa rumah atau cicilan KPR", "Listrik, air, dan gas", "Makanan pokok dan kebutuhan dapur",
+            "Gaji PRT/ Baby Sitter/ Driver/ Satpam", "Transportasi (bensin, ongkos, servis kendaraan)",
+            "Asuransi kesehatan dan jiwa", "Biaya pendidikan anak/ sendiri", "Biaya Les anak",
+            "Jajan anak", "Tagihan telepon dan internet", "Obat-obatan", "Cicilan kartu kredit",
+            "Iuran lingkungan", "Perlengkapan rumah tangga"
+        ],
+        "Nominal (IDR)": [
+            8_000_000, 800_000, 3_000_000, 2_000_000, 1_500_000, 500_000,
+            400_000, 500_000, 600_000, 200_000, 0, 0, 0, 3_000_000
+        ]
+    }
+    df_kebutuhan = st.data_editor(pd.DataFrame(kebutuhan_data), num_rows="dynamic")
 
-        st.subheader("🎈 List Keinginan")
-        keinginan_data = {
-            "No": list(range(1, 12)),
-            "List Keinginan": [
-                "Makan di luar", "Langganan hiburan", "Liburan", "Belanja non-esensial", "Gadget",
-                "Hobi", "Gym", "Dekorasi rumah", "Tiket event", "Arisan", "Nongkrong"
-            ],
-            "Nominal (IDR)": [800_000, 250_000, 0, 0, 100_000, 0, 600_000, 500_000, 1_000_000, 2_000_000, 1_000_000]
-        }
-        df_keinginan = st.data_editor(pd.DataFrame(keinginan_data), num_rows="fixed")
+    st.subheader("🎈 List Keinginan")
+    keinginan_data = {
+        "No": list(range(1, 12)),
+        "List Keinginan": [
+            "Makan di luar", "Langganan hiburan", "Liburan", "Belanja non-esensial", "Gadget",
+            "Hobi", "Gym", "Dekorasi rumah", "Tiket event", "Arisan", "Nongkrong"
+        ],
+        "Nominal (IDR)": [
+            800_000, 250_000, 0, 0, 100_000, 0, 600_000, 500_000, 1_000_000, 2_000_000, 1_000_000
+        ]
+    }
+    df_keinginan = st.data_editor(pd.DataFrame(keinginan_data), num_rows="dynamic")
 
     with right_col:
         total_kebutuhan = df_kebutuhan["Nominal (IDR)"].sum()
@@ -54,6 +54,17 @@ with tab1:
         total_saving = 3_000_000
         total_outflow = total_kebutuhan + total_keinginan + total_saving
         surplus = take_home - total_outflow
+
+        # Monthly and yearly total (from kebutuhan + keinginan only)
+        pengeluaran_bulanan = total_kebutuhan + total_keinginan
+        pengeluaran_tahunan = pengeluaran_bulanan * 12
+
+        st.markdown(f"""
+        <div style='border: 3px solid #1976d2; border-radius: 10px; padding: 20px; background-color: #e3f2fd; margin-bottom: 10px;'>
+            <h3 style='color: #0d47a1;'>📌 Total Pengeluaran Bulanan: Rp{pengeluaran_bulanan:,.0f}</h3>
+            <h3 style='color: #0d47a1;'>📌 Total Pengeluaran Tahunan: Rp{pengeluaran_tahunan:,.0f}</h3>
+        </div>
+        """, unsafe_allow_html=True)
 
         st.metric("Total Kebutuhan", f"Rp{total_kebutuhan:,.0f}")
         st.metric("Total Keinginan", f"Rp{total_keinginan:,.0f}")
