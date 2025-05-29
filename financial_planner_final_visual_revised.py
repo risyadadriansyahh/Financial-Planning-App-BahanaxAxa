@@ -21,6 +21,16 @@ with tab1:
     </div>
     """, unsafe_allow_html=True)
 
+    # Input field with larger number
+    take_home = st.number_input(
+        label="",
+        value=40_000_000,
+        step=100_000,
+        key="take_home",
+        label_visibility="collapsed",
+        format="%.0f"
+    )
+
     # Define columns BEFORE using them
     left_col, right_col = st.columns([2, 1])
 
