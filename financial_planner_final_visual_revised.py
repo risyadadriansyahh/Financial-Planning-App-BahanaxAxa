@@ -15,14 +15,15 @@ tab1, tab2, tab3 = st.tabs(["📝 Expense Input", "🎯 Retirement Need", "📊 
 with tab1:
     st.markdown("### 📌 Input Rincian Pengeluaran Bulanan dan Take Home Pay")
 
-    # Styled container
     st.markdown("""
     <div style='border: 2px solid #0d47a1; border-radius: 10px; padding: 15px 20px; background-color: #e3f2fd; margin-bottom: 20px;'>
         <p style='color: #0d47a1; font-size: 18px; margin-bottom: 10px;'><strong>💰 Take Home Pay Bulanan (IDR)</strong></p>
     </div>
     """, unsafe_allow_html=True)
 
-    # Input field with larger number
+    # Define columns BEFORE using them
+    left_col, right_col = st.columns([2, 1])
+
     take_home = st.number_input(
         label="",
         value=40_000_000,
@@ -31,6 +32,13 @@ with tab1:
         label_visibility="collapsed",
         format="%.0f"
     )
+
+    st.markdown(f"""
+    <div style='font-size: 24px; color: #0d47a1; margin-top: -10px; margin-bottom: 30px;'>
+        <strong>Rp{take_home:,.0f}</strong>
+    </div>
+    """, unsafe_allow_html=True)
+    
     with left_col:
         st.subheader("📂 List Kebutuhan")
         kebutuhan_data = {
