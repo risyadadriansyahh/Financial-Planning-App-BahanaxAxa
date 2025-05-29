@@ -127,8 +127,8 @@ with tab2:
     fv_pengeluaran = pengeluaran_tahunan_pensiun * ((1 + inflasi) ** masa_akumulasi)
     st.markdown(f"### 📈 Nilai masa depan target pengeluaran pensiun (FV): **Rp{fv_pengeluaran:,.0f}**")
 
-    inflasi_pensiun = st.number_input("Inflasi saat pensiun (p.a)", value=5.0) / 100
-    return_pensiun = st.number_input("Return saat pensiun (p.a)", value=0.0) / 100
+    inflasi_pensiun = st.number_input("Inflasi saat masa pensiun (p.a)", value=5.0) / 100
+    return_pensiun = st.number_input("Return saat masa pensiun (p.a)", value=0.0) / 100
     real_return = ((1 + return_pensiun) / (1 + inflasi_pensiun)) - 1
 
     if real_return == 0:
@@ -138,7 +138,7 @@ with tab2:
 
     st.markdown(
         f"<div style='border:3px solid #d32f2f;padding:20px;border-radius:10px;margin:20px 0;background-color:#ffecec;'>"
-        f"<h4>📦 Jumlah total kapital yang dibutuhkan saat pensiun:</h4>"
+        f"<h4>📦 Jumlah total kapital yang dibutuhkan saat masa pensiun:</h4>"
         f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
         f"<p><i>Anda perlu menyiapkan dana ini untuk mempertahankan gaya hidup pensiun Anda.</i></p>"
         f"</div>",
