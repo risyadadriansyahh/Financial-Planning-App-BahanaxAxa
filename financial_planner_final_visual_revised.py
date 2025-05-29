@@ -31,7 +31,6 @@ with tab1:
         label_visibility="collapsed",
         format="%.0f"
     )
-
     with left_col:
         st.subheader("📂 List Kebutuhan")
         kebutuhan_data = {
