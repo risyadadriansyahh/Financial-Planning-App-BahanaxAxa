@@ -17,36 +17,37 @@ with tab1:
     take_home = st.number_input("💰 Take Home Pay Bulanan (IDR)", value=40_000_000, step=100_000)
 
     left_col, right_col = st.columns([2, 1])
-        with left_col:
-    st.subheader("📂 List Kebutuhan")
-    kebutuhan_data = {
-        "No": list(range(1, 15)),
-        "List Kebutuhan": [
-            "Sewa rumah atau cicilan KPR", "Listrik, air, dan gas", "Makanan pokok dan kebutuhan dapur",
-            "Gaji PRT/ Baby Sitter/ Driver/ Satpam", "Transportasi (bensin, ongkos, servis kendaraan)",
-            "Asuransi kesehatan dan jiwa", "Biaya pendidikan anak/ sendiri", "Biaya Les anak",
-            "Jajan anak", "Tagihan telepon dan internet", "Obat-obatan", "Cicilan kartu kredit",
-            "Iuran lingkungan", "Perlengkapan rumah tangga"
-        ],
-        "Nominal (IDR)": [
-            8_000_000, 800_000, 3_000_000, 2_000_000, 1_500_000, 500_000,
-            400_000, 500_000, 600_000, 200_000, 0, 0, 0, 3_000_000
-        ]
-    }
-    df_kebutuhan = st.data_editor(pd.DataFrame(kebutuhan_data), num_rows="dynamic")
 
-    st.subheader("🎈 List Keinginan")
-    keinginan_data = {
-        "No": list(range(1, 12)),
-        "List Keinginan": [
-            "Makan di luar", "Langganan hiburan", "Liburan", "Belanja non-esensial", "Gadget",
-            "Hobi", "Gym", "Dekorasi rumah", "Tiket event", "Arisan", "Nongkrong"
-        ],
-        "Nominal (IDR)": [
-            800_000, 250_000, 0, 0, 100_000, 0, 600_000, 500_000, 1_000_000, 2_000_000, 1_000_000
-        ]
-    }
-    df_keinginan = st.data_editor(pd.DataFrame(keinginan_data), num_rows="dynamic")
+    with left_col:
+        st.subheader("📂 List Kebutuhan")
+        kebutuhan_data = {
+            "No": list(range(1, 15)),
+            "List Kebutuhan": [
+                "Sewa rumah atau cicilan KPR", "Listrik, air, dan gas", "Makanan pokok dan kebutuhan dapur",
+                "Gaji PRT/ Baby Sitter/ Driver/ Satpam", "Transportasi (bensin, ongkos, servis kendaraan)",
+                "Asuransi kesehatan dan jiwa", "Biaya pendidikan anak/ sendiri", "Biaya Les anak",
+                "Jajan anak", "Tagihan telepon dan internet", "Obat-obatan", "Cicilan kartu kredit",
+                "Iuran lingkungan", "Perlengkapan rumah tangga"
+            ],
+            "Nominal (IDR)": [
+                8_000_000, 800_000, 3_000_000, 2_000_000, 1_500_000, 500_000,
+                400_000, 500_000, 600_000, 200_000, 0, 0, 0, 3_000_000
+            ]
+        }
+        df_kebutuhan = st.data_editor(pd.DataFrame(kebutuhan_data), num_rows="dynamic")
+
+        st.subheader("🎈 List Keinginan")
+        keinginan_data = {
+            "No": list(range(1, 12)),
+            "List Keinginan": [
+                "Makan di luar", "Langganan hiburan", "Liburan", "Belanja non-esensial", "Gadget",
+                "Hobi", "Gym", "Dekorasi rumah", "Tiket event", "Arisan", "Nongkrong"
+            ],
+            "Nominal (IDR)": [
+                800_000, 250_000, 0, 0, 100_000, 0, 600_000, 500_000, 1_000_000, 2_000_000, 1_000_000
+            ]
+        }
+        df_keinginan = st.data_editor(pd.DataFrame(keinginan_data), num_rows="dynamic")
 
     with right_col:
         total_kebutuhan = df_kebutuhan["Nominal (IDR)"].sum()
@@ -55,7 +56,6 @@ with tab1:
         total_outflow = total_kebutuhan + total_keinginan + total_saving
         surplus = take_home - total_outflow
 
-        # Monthly and yearly total (from kebutuhan + keinginan only)
         pengeluaran_bulanan = total_kebutuhan + total_keinginan
         pengeluaran_tahunan = pengeluaran_bulanan * 12
 
@@ -78,6 +78,7 @@ with tab1:
                wedgeprops={'linewidth': 1, 'edgecolor': 'white'})
         ax.set_title("Proporsi Alokasi Bulanan", fontsize=10)
         st.pyplot(fig)
+
 
 # ----------------------
 # Tab 2: Retirement Needs Projection
