@@ -17,7 +17,7 @@ with tab1:
     take_home = st.number_input("💰 Take Home Pay Bulanan (IDR)", value=40_000_000, step=100_000)
 
     left_col, right_col = st.columns([2, 1])
-    with left_col:
+        with left_col:
     st.subheader("📂 List Kebutuhan")
     kebutuhan_data = {
         "No": list(range(1, 15)),
