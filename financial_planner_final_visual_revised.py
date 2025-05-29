@@ -13,30 +13,30 @@ tab1, tab2, tab3 = st.tabs(["📝 Expense Input", "🎯 Retirement Need", "📊 
 # Tab 1: Expense Inputs
 # ----------------------
 with tab1:
- st.markdown("### 📌 Input Rincian Pengeluaran Bulanan dan Take Home Pay")
+    st.markdown("### 📌 Input Rincian Pengeluaran Bulanan dan Take Home Pay")
 
-take_home = st.number_input(
-    "💰 Take Home Pay Bulanan (IDR)",
-    value=40_000_000,
-    step=100_000,
-    format="%.0f"
-)
+    take_home = st.number_input(
+        "💰 Take Home Pay Bulanan (IDR)",
+        value=40_000_000,
+        step=100_000,
+        format="%.0f"
+    )
 
-st.markdown(f"""
-<div style='padding: 10px 0 20px 0;'>
-    <h2 style='color:#0d47a1; font-size: 28px;'>Rp{take_home:,.0f}</h2>
-</div>
-""", unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style='padding: 10px 0 20px 0;'>
+        <h2 style='color:#0d47a1; font-size: 28px;'>Rp{take_home:,.0f}</h2>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Define columns BEFORE using them
     left_col, right_col = st.columns([2, 1])
-    
+
     st.markdown(f"""
     <div style='font-size: 24px; color: #0d47a1; margin-top: -10px; margin-bottom: 30px;'>
         <strong>Rp{take_home:,.0f}</strong>
     </div>
     """, unsafe_allow_html=True)
-    
+
     with left_col:
         st.subheader("📂 List Kebutuhan")
         kebutuhan_data = {
