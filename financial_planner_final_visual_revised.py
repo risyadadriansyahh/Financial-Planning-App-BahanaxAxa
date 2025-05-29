@@ -24,7 +24,8 @@ with tab1:
 
     st.markdown(f"""
     <div style='padding: 10px 0 20px 0;'>
-        <h2 style='color:#0d47a1; font-size: 28px;'>Rp{take_home:,}</h2>
+    <p style='color:#0d47a1; font-size: 18px; margin: 0;'><strong>Take Home Pay Bulanan</strong></p>
+    <h2 style='color:#0d47a1; font-size: 28px;'>Rp{take_home:,}</h2>
     </div>
     """, unsafe_allow_html=True)
 
