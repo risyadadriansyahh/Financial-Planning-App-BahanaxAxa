@@ -17,7 +17,6 @@ with tab1:
     take_home = st.number_input("💰 Take Home Pay Bulanan (IDR)", value=40_000_000, step=100_000)
 
     left_col, right_col = st.columns([2, 1])
-
     with left_col:
         st.subheader("📂 List Kebutuhan")
         kebutuhan_data = {
@@ -52,17 +51,16 @@ with tab1:
     with right_col:
         total_kebutuhan = df_kebutuhan["Nominal (IDR)"].sum()
         total_keinginan = df_keinginan["Nominal (IDR)"].sum()
+        pengeluaran_bulanan_input = total_kebutuhan + total_keinginan
+        pengeluaran_tahunan_input = pengeluaran_bulanan_input * 12
         total_saving = 3_000_000
-        total_outflow = total_kebutuhan + total_keinginan + total_saving
+        total_outflow = pengeluaran_bulanan_input + total_saving
         surplus = take_home - total_outflow
-
-        pengeluaran_bulanan = total_kebutuhan + total_keinginan
-        pengeluaran_tahunan = pengeluaran_bulanan * 12
 
         st.markdown(f"""
         <div style='border: 3px solid #1976d2; border-radius: 10px; padding: 20px; background-color: #e3f2fd; margin-bottom: 10px;'>
-            <h3 style='color: #0d47a1;'>📌 Total Pengeluaran Bulanan: Rp{pengeluaran_bulanan:,.0f}</h3>
-            <h3 style='color: #0d47a1;'>📌 Total Pengeluaran Tahunan: Rp{pengeluaran_tahunan:,.0f}</h3>
+            <h3 style='color: #0d47a1;'>📌 Total Pengeluaran Bulanan: Rp{pengeluaran_bulanan_input:,.0f}</h3>
+            <h3 style='color: #0d47a1;'>📌 Total Pengeluaran Tahunan: Rp{pengeluaran_tahunan_input:,.0f}</h3>
         </div>
         """, unsafe_allow_html=True)
 
@@ -78,7 +76,6 @@ with tab1:
                wedgeprops={'linewidth': 1, 'edgecolor': 'white'})
         ax.set_title("Proporsi Alokasi Bulanan", fontsize=10)
         st.pyplot(fig)
-
 
 # ----------------------
 # Tab 2: Retirement Needs Projection
@@ -116,7 +113,6 @@ with tab2:
         f"</div>",
         unsafe_allow_html=True
     )
-
 # ----------------------
 # Tab 3: Investment Strategy
 # ----------------------
