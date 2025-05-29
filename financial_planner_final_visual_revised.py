@@ -33,16 +33,7 @@ with tab1:
 
     # Define columns BEFORE using them
     left_col, right_col = st.columns([2, 1])
-
-    take_home = st.number_input(
-        label="",
-        value=40_000_000,
-        step=100_000,
-        key="take_home",
-        label_visibility="collapsed",
-        format="%.0f"
-    )
-
+    
     st.markdown(f"""
     <div style='font-size: 24px; color: #0d47a1; margin-top: -10px; margin-bottom: 30px;'>
         <strong>Rp{take_home:,.0f}</strong>
