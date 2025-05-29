@@ -19,7 +19,7 @@ with tab1:
         "💰 Take Home Pay Bulanan (IDR)",
         value=40_000_000,
         step=100_000,
-        format="%.0f"
+        format="int.0f"
     )
 
     st.markdown(f"""
