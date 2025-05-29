@@ -14,9 +14,15 @@ tab1, tab2, tab3 = st.tabs(["📝 Expense Input", "🎯 Retirement Need", "📊 
 # ----------------------
 with tab1:
     st.markdown("### 📌 Input Rincian Pengeluaran Bulanan dan Take Home Pay")
-    take_home = st.number_input("💰 Take Home Pay Bulanan (IDR)", value=40_000_000, step=100_000)
 
+    st.markdown("""
+    <div style='border: 2px solid #0d47a1; border-radius: 10px; padding: 15px; background-color: #e3f2fd; margin-bottom: 20px;'>
+        <h3 style='color: #0d47a1; margin-bottom: 10px;'>💰 Take Home Pay Bulanan (IDR)</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    take_home = st.number_input("", value=40_000_000, step=100_000, key="take_home", label_visibility="collapsed")
     left_col, right_col = st.columns([2, 1])
+    
     with left_col:
         st.subheader("📂 List Kebutuhan")
         kebutuhan_data = {
