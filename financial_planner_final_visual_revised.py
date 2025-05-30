@@ -181,6 +181,9 @@ with tab2:
 with tab3:
     st.markdown("## 💡 Strategi Investasi untuk Tutup Defisit")
 
+    # Table title
+    st.subheader("📋 Asset Investasi Yang Dimiliki Saat Ini")
+
     # 1️⃣ Allow user to add as many asset classes as they like:
     asset_data = {
         "Aset Investasi": [
@@ -193,8 +196,8 @@ with tab3:
     }
     df_assets = st.data_editor(
         pd.DataFrame(asset_data), 
-        num_rows="dynamic",       # ← users can add/remove rows
-        use_container_width=True  # ← stretch editor full width
+        num_rows="dynamic",       # users can add/remove rows
+        use_container_width=True  # stretch editor full width
     )
 
     # 2️⃣ Project each to retirement
