@@ -97,6 +97,9 @@ with tab1:
         ax.set_title("Proporsi Alokasi Bulanan", fontsize=10)
         st.pyplot(fig)
 
+# ----------------------
+# Tab 2: Retirement Needs
+# ----------------------
 with tab2:
     st.markdown("## 🎯 Target Dana Pensiun")
 
@@ -138,48 +141,8 @@ with tab2:
         f"<p><i>Anda perlu menyiapkan dana ini untuk mempertahankan gaya hidup pensiun Anda selama {masa_pensiun} tahun.</i></p>"
         f"</div>",
         unsafe_allow_html=True
-    )with tab2:
-    st.markdown("## 🎯 Target Dana Pensiun")
-
-    col1, col2, col3 = st.columns(3)
-    usia_skrg = col1.number_input("Usia saat ini", value=34)
-    usia_pensiun = col2.number_input("Usia pensiun", value=55)
-    usia_meninggal = col3.number_input("Harapan hidup", value=75)
-
-    masa_pensiun = usia_meninggal - usia_pensiun
-    masa_akumulasi = usia_pensiun - usia_skrg
-
-    col4, col5 = st.columns(2)
-    col4.markdown(f"🧓 Masa pensiun: **{masa_pensiun} tahun**")
-    col5.markdown(f"📈 Masa akumulasi: **{masa_akumulasi} tahun**")
-
-    pengeluaran_tahunan_saat_ini = st.number_input("Pengeluaran Tahunan Saat Ini (IDR)", value=75_000_000, step=1_000_000)
-    persentase_pensiun = st.number_input("Persentase Pengeluaran Saat Pensiun (%)", value=70) / 100
-    inflasi = st.number_input("Asumsi Inflasi (p.a)", value=5.0) / 100
-
-    pengeluaran_pensiun_pv = pengeluaran_tahunan_saat_ini * persentase_pensiun
-    pengeluaran_pensiun_fv = pengeluaran_pensiun_pv * ((1 + inflasi) ** masa_akumulasi)
-
-    st.markdown(f"### 📌 Pengeluaran di masa pensiun (PV): **Rp{pengeluaran_pensiun_pv:,.0f}**")
-    st.markdown(f"### 📈 Nilai masa depan pengeluaran pensiun (FV): **Rp{pengeluaran_pensiun_fv:,.0f}**")
-
-    inflasi_pensiun = st.number_input("Inflasi Saat Pensiun (p.a)", value=5.0) / 100
-    return_pensiun = st.number_input("Return Investasi Saat Pensiun (p.a)", value=0.0) / 100
-    real_return = ((1 + return_pensiun) / (1 + inflasi_pensiun)) - 1
-
-    if real_return == 0:
-        pvad = pengeluaran_pensiun_fv * masa_pensiun
-    else:
-        pvad = pengeluaran_pensiun_fv * (((1 - (1 + real_return) ** -masa_pensiun) / real_return) * (1 + real_return))
-
-    st.markdown(
-        f"<div style='border:3px solid #d32f2f;padding:20px;border-radius:10px;margin:20px 0;background-color:#ffecec;'>"
-        f"<h4>📦 Jumlah total kapital yang dibutuhkan saat pensiun:</h4>"
-        f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
-        f"<p><i>Anda perlu menyiapkan dana ini untuk mempertahankan gaya hidup pensiun Anda selama {masa_pensiun} tahun.</i></p>"
-        f"</div>",
-        unsafe_allow_html=True
     )
+
 # ----------------------
 # Tab 3: Investment Strategy
 # ----------------------
