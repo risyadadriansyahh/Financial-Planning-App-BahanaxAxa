@@ -133,7 +133,7 @@ with tab2:
 
     # % of today’s expense desired in retirement
     persentase_pensiun = st.number_input(
-        "Persentase Pengeluaran Saat Pensiun (%)", 
+        "Persentase Pengeluaran Saat Pensiun dibandingkan Sekarang (%)", 
         value=70, min_value=0, max_value=100
     ) / 100
 
