@@ -199,7 +199,9 @@ with tab3:
         num_rows="dynamic",       # users can add/remove rows
         use_container_width=True  # stretch editor full width
     )
-
+    
+    # Table title
+    st.subheader("📋 Proyeksi Pertumbuhan Asset Investasi Yang Dimiliki Saat Ini Sampai Hari Pertama Pensiun")
     # 2️⃣ Project each to retirement
     df_assets["Proyeksi Saat Pensiun"] = df_assets.apply(
         lambda r: r["Nominal Saat Ini"] * ((1 + r["Imbal Hasil (% p.a)"]/100) ** masa_akumulasi),
