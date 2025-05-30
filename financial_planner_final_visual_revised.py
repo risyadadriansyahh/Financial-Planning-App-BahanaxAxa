@@ -31,12 +31,6 @@ with tab1:
 
     left_col, right_col = st.columns([2, 1])
 
-    st.markdown(f"""
-    <div style='font-size: 24px; color: #0d47a1; margin-top: -10px; margin-bottom: 30px;'>
-        <strong>Rp{take_home:,}</strong>
-    </div>
-    """, unsafe_allow_html=True)
-
     with left_col:
         st.subheader("📂 List Kebutuhan")
         kebutuhan_data = {
@@ -223,7 +217,7 @@ with tab3:
     st.markdown(
         f"<div style='border:3px solid #f57c00;padding:20px;border-radius:10px;"
         f"background-color:#fff3e0;margin:20px 0;'>"
-        f"<h4>❗ Defisit yang harus dialokasikan:</h4>"
+        f"<h4>❗ Defisit Kapital Yang Harus Dialokasikan Untuk Memenuhi Pengeluaran Lifestyle Setelah Pensiunn:</h4>"
         f"<h2 style='color:#f57c00;'>Rp{deficit:,.0f}</h2>"
         f"</div>",
         unsafe_allow_html=True
@@ -258,5 +252,10 @@ with tab3:
             f"<h2 style='color:#388e3c;'>Rp{pmt:,.0f} / bulan</h2>"
             f"</div>",
             unsafe_allow_html=True
+        )
+                # New instruction line below the box
+        st.markdown(
+            f"**Anda harus menabung Rp{pmt:,.0f} / bulan secara disiplin** "
+            "dengan kombinasi alokasi asset sesuai tabel di atas."
         )
 
