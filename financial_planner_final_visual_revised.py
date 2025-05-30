@@ -245,17 +245,16 @@ with tab3:
         n_months = masa_akumulasi * 12
         pmt = (deficit * r_monthly) / (((1 + r_monthly) ** n_months - 1)*(1 + r_monthly)) if r_monthly else deficit/n_months
 
-        st.markdown(
-            f"<div style='border:3px solid #388e3c;padding:20px;border-radius:10px;"
-            f"background-color:#e8f5e9;margin:20px 0;'>"
-            f"<h4>✅ Dengan return gabungan {weighted_return:.2f}%:</h4>"
-            f"<h2 style='color:#388e3c;'>Rp{pmt:,.0f} / bulan</h2>"
-            f"</div>",
-            unsafe_allow_html=True
+     st.markdown(
+        f"""
+        <div style="border:3px solid #388e3c; padding:20px; border-radius:10px; background-color:#e8f5e9; margin:20px 0;">
+      <h4>✅ Dengan return gabungan {weighted_return:.2f}%:</h4>
+      <h2 style="color:#388e3c;">Rp{pmt:,.0f} / bulan</h2>
+      <p><i>Anda harus menabung Rp{pmt:,.0f} / bulan secara disiplin dengan kombinasi alokasi asset sesuai tabel di atas.</i></p>
+        </div>
+        """,
+        unsafe_allow_html=True
         )
-                # New instruction line below the box
-        st.markdown(
-            f"**Anda harus menabung Rp{pmt:,.0f} / bulan secara disiplin** "
-            "dengan kombinasi alokasi asset sesuai tabel di atas."
-        )
+
+    
 
