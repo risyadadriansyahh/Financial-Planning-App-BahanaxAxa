@@ -134,7 +134,7 @@ with tab2:
     pengeluaran_pensiun_fv = pengeluaran_pensiun_pv * ((1 + inflasi) ** masa_akumulasi)
 
     st.markdown(f"📌 Pengeluaran Lifestyle Tahunan di Masa Pensiun (PV): **Rp{pengeluaran_pensiun_pv:,.0f}**")
-    st.markdown(f"📈 Nilai Masa Depan Pengeluaran Lifestyle Ketika Pensiun (FV): **Rp{pengeluaran_pensiun_fv:,.0f}**")
+    st.markdown(f"📈 Nilai Masa Depan Pengeluaran Lifestyle Tahunan Ketika Pensiun (FV): **Rp{pengeluaran_pensiun_fv:,.0f}**")
 
     st.markdown("---")
 
