@@ -101,74 +101,65 @@ with tab1:
 # Tab 2: Retirement Needs Projection
 # ----------------------
 with tab2:
-    st.markdown("## 🎯 Target Dana Pensiun")
+    st.markdown("## 🎯 So, butuh dana berapa sih saat pensiun?")
 
-    # 1️⃣ Age Inputs
+    # Inputs
     col1, col2, col3 = st.columns(3)
-    usia_skrg    = col1.number_input("Usia saat ini", value=34, min_value=18, max_value=100)
-    usia_pensiun = col2.number_input("Usia pensiun yang diinginkan", 
-                                     value=55, min_value=usia_skrg+1, max_value=120)
-    usia_meninggal = col3.number_input("Harapan hidup", 
-                                       value=75, min_value=usia_pensiun+1, max_value=120)
-
-    # Calculate periods
-    masa_akumulasi = usia_pensiun - usia_skrg   # years until retirement
-    masa_pensiun   = usia_meninggal - usia_pensiun  # years in retirement
-
-    # Display periods side-by-side
-    col4, col5 = st.columns(2)
-    col4.markdown(f"🧓 Masa pensiun: **{masa_pensiun} tahun**")
-    col5.markdown(f"📈 Masa akumulasi: **{masa_akumulasi} tahun**")
-
-    st.markdown("---")
-
-    # 2️⃣ Expense Inputs & PV/FV Calculation
-    # Input current monthly lifestyle expense
-    pengeluaran_bulanan = st.number_input(
-        "Pengeluaran Lifestyle Bulanan Saat Ini (IDR)", 
-        value=6_250_000, step=100_000
+    pengeluaran_tahunan_saat_ini = col1.number_input(
+        "Pengeluaran tahunan saat ini (IDR)",
+        value=75_000_000,
+        step=1_000_000,
+        format="%.0f"
     )
-    pengeluaran_tahunan = pengeluaran_bulanan * 12
-    st.markdown(f"📌 *Pengeluaran tahunan saat ini:* **Rp{pengeluaran_tahunan:,.0f}**")
-
-    # % of today’s expense desired in retirement
-    persentase_pensiun = st.number_input(
-        "Persentase Pengeluaran Saat Pensiun (%)", 
-        value=70, min_value=0, max_value=100
+    persentase_pensiun = col2.number_input(
+        "Persentase pengeluaran di masa pensiun (%)",
+        value=70,
+        min_value=0,
+        max_value=100
     ) / 100
+    tahun_sampai_pensiun = col3.number_input(
+        "Jangka waktu hingga masa pensiun (tahun)",
+        value=55 - 34,  # default 21
+        step=1
+    )
 
-    inflasi = st.number_input("Asumsi Inflasi hingga Pensiun (p.a)", value=5.0) / 100
+    # PV and FV
+    pv = pengeluaran_tahunan_saat_ini * persentase_pensiun
+    inflasi = st.number_input("Asumsi tingkat inflasi (p.a)", value=5.0) / 100
+    fv = pv * ((1 + inflasi) ** tahun_sampai_pensiun)
 
-    # PV = expense desired today
-    pengeluaran_pensiun_pv = pengeluaran_tahunan * persentase_pensiun  
-    # FV = PV inflated over masa_akumulasi
-    pengeluaran_pensiun_fv = pengeluaran_pensiun_pv * ((1 + inflasi) ** masa_akumulasi)
-
-    st.markdown(f"📌 *Pengeluaran tahunan di masa pensiun (PV):* **Rp{pengeluaran_pensiun_pv:,.0f}**")
-    st.markdown(f"📈 *Nilai masa depan pengeluaran tahunan (FV):* **Rp{pengeluaran_pensiun_fv:,.0f}**")
+    st.markdown(f"**Pengeluaran yang diinginkan di masa pensiun (PV):** Rp{pv:,.0f}")
+    st.markdown(f"**Nilai masa depan keinginan pengeluaran (FV):** Rp{fv:,.0f}")
 
     st.markdown("---")
 
-    # 3️⃣ Retirement drawdown assumptions & PVAD
-    inflasi_pensiun  = st.number_input("Asumsi Inflasi Saat Pensiun (p.a)",      value=0.0) / 100
-    return_pensiun   = st.number_input("Return Investasi Saat Pensiun (p.a)",   value=0.0) / 100
-    real_return      = (1 + return_pensiun) / (1 + inflasi_pensiun) - 1
-    st.markdown(f"📉 *Tingkat pengembalian riil selama pensiun:* **{real_return*100:.2f}%**")
+    # Assumptions for drawdown
+    col4, col5, col6 = st.columns(3)
+    inflasi_pensiun = col4.number_input("Asumsi inflasi saat pensiun (p.a)", value=5.0) / 100
+    return_pensiun  = col5.number_input("Asumsi return investasi pensiun (p.a)", value=0.0) / 100
+    masa_pensiun    = col6.number_input("Masa pensiun yang diharapkan (tahun)", value=20, step=1)
 
-    # PVAD: capital needed at retirement start
+    # Real return calculation
+    real_return = (1 + return_pensiun) / (1 + inflasi_pensiun) - 1
+    st.markdown(f"**Tingkat pengembalian riil selama pensiun (i):** {real_return*100:.2f}%")
+
+    # PMT = first-year payment = FV
+    pmt = fv
+    # PVAD calculation (annuity due)
     if real_return == 0:
-        pvad = pengeluaran_pensiun_fv * masa_pensiun
+        pvad = pmt * masa_pensiun
     else:
-        pvad = pengeluaran_pensiun_fv * (((1 - (1 + real_return) ** -masa_pensiun) / real_return) * (1 + real_return))
+        pvad = pmt * (((1 - (1 + real_return) ** -masa_pensiun) / real_return) * (1 + real_return))
 
+    # Output box
     st.markdown(
-        f"<div style='border:3px solid #d32f2f; padding:20px; border-radius:10px; margin-top:20px; background-color:#ffecec;'>"
-        f"<h4>📦 Jumlah total kapital yang dibutuhkan di awal pensiun:</h4>"
+        f"<div style='border:3px solid #d32f2f; padding:20px; border-radius:8px; background-color:#ffecec;'>"
+        f"<h4>📦 Jumlah total kapital yang dibutuhkan saat pensiun (PVAD):</h4>"
         f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
-        f"<p><i>Untuk menopang pengeluaran tahunan sebesar Rp{pengeluaran_pensiun_fv:,.0f} selama {masa_pensiun} tahun.</i></p>"
         f"</div>",
         unsafe_allow_html=True
     )
+
 
 # ----------------------
 # Tab 3: Investment Strategy
@@ -177,7 +168,7 @@ with tab3:
     st.markdown("## 💡 Strategi Investasi untuk Tutup Defisit")
 
     asset_data = {
-        "Aset Investasi": ["Tabungan", "Deposito", "RDPU", "RDPD", "RDS", "Emas"],
+        "Aset Investasi": ["Tabungan", "Deposito", "Reksa Dana Pasar Uang", "Reksa Dana Pendapatan Tetap", "Reksa Dana Saham", "Emas"],
         "Imbal Hasil (p.a)": [0.5, 2.0, 5.0, 6.0, 9.0, 8.0],
         "Nominal Saat Ini": [100_000_000, 0, 0, 50_000_000, 0, 100_000_000]
     }
@@ -206,7 +197,7 @@ with tab3:
     st.markdown("### 📊 Simulasi Alokasi Investasi Bulanan")
 
     alloc_data = {
-        "Aset": ["Deposito", "RDPU", "RDPD", "RDS", "Emas"],
+        "Aset": ["Deposito", "Reksa Dana Pasar Uang, "Reksa Dana Pendapatan Tetap", "Reksa Dana Saham", "Emas"],
         "Imbal Hasil (%)": [2.0, 5.0, 6.0, 9.0, 8.0],
         "Alokasi (%)": [20, 20, 20, 20, 20]
     }
