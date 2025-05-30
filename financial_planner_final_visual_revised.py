@@ -98,47 +98,74 @@ with tab1:
         st.pyplot(fig)
 
 # ----------------------
-# Tab 2: Retirement Needs
+# Tab 2: Retirement Needs Projection
 # ----------------------
 with tab2:
     st.markdown("## 🎯 Target Dana Pensiun")
 
+    # 1️⃣ Age Inputs
     col1, col2, col3 = st.columns(3)
-    usia_skrg = col1.number_input("Usia saat ini", value=34)
-    usia_pensiun = col2.number_input("Usia pensiun", value=55)
-    usia_meninggal = col3.number_input("Harapan hidup", value=75)
+    usia_skrg    = col1.number_input("Usia saat ini", value=34, min_value=18, max_value=100)
+    usia_pensiun = col2.number_input("Usia pensiun yang diinginkan", 
+                                     value=55, min_value=usia_skrg+1, max_value=120)
+    usia_meninggal = col3.number_input("Harapan hidup", 
+                                       value=75, min_value=usia_pensiun+1, max_value=120)
 
-    masa_pensiun = usia_meninggal - usia_pensiun
-    masa_akumulasi = usia_pensiun - usia_skrg
+    # Calculate periods
+    masa_akumulasi = usia_pensiun - usia_skrg   # years until retirement
+    masa_pensiun   = usia_meninggal - usia_pensiun  # years in retirement
 
+    # Display periods side-by-side
     col4, col5 = st.columns(2)
     col4.markdown(f"🧓 Masa pensiun: **{masa_pensiun} tahun**")
     col5.markdown(f"📈 Masa akumulasi: **{masa_akumulasi} tahun**")
 
-    pengeluaran_tahunan_saat_ini = st.number_input("Pengeluaran Tahunan Saat Ini (IDR)", value=75_000_000, step=1_000_000)
-    persentase_pensiun = st.number_input("Persentase Pengeluaran Saat Pensiun (%)", value=70) / 100
-    inflasi = st.number_input("Asumsi Inflasi (p.a)", value=5.0) / 100
+    st.markdown("---")
 
-    pengeluaran_pensiun_pv = pengeluaran_tahunan_saat_ini * persentase_pensiun
+    # 2️⃣ Expense Inputs & PV/FV Calculation
+    # Input current monthly lifestyle expense
+    pengeluaran_bulanan = st.number_input(
+        "Pengeluaran Lifestyle Bulanan Saat Ini (IDR)", 
+        value=6_250_000, step=100_000
+    )
+    pengeluaran_tahunan = pengeluaran_bulanan * 12
+    st.markdown(f"📌 *Pengeluaran tahunan saat ini:* **Rp{pengeluaran_tahunan:,.0f}**")
+
+    # % of today’s expense desired in retirement
+    persentase_pensiun = st.number_input(
+        "Persentase Pengeluaran Saat Pensiun (%)", 
+        value=70, min_value=0, max_value=100
+    ) / 100
+
+    inflasi = st.number_input("Asumsi Inflasi hingga Pensiun (p.a)", value=5.0) / 100
+
+    # PV = expense desired today
+    pengeluaran_pensiun_pv = pengeluaran_tahunan * persentase_pensiun  
+    # FV = PV inflated over masa_akumulasi
     pengeluaran_pensiun_fv = pengeluaran_pensiun_pv * ((1 + inflasi) ** masa_akumulasi)
 
-    st.markdown(f"### 📌 Pengeluaran di masa pensiun (PV): **Rp{pengeluaran_pensiun_pv:,.0f}**")
-    st.markdown(f"### 📈 Nilai masa depan pengeluaran pensiun (FV): **Rp{pengeluaran_pensiun_fv:,.0f}**")
+    st.markdown(f"📌 *Pengeluaran tahunan di masa pensiun (PV):* **Rp{pengeluaran_pensiun_pv:,.0f}**")
+    st.markdown(f"📈 *Nilai masa depan pengeluaran tahunan (FV):* **Rp{pengeluaran_pensiun_fv:,.0f}**")
 
-    inflasi_pensiun = st.number_input("Inflasi Saat Pensiun (p.a)", value=5.0) / 100
-    return_pensiun = st.number_input("Return Investasi Saat Pensiun (p.a)", value=0.0) / 100
-    real_return = ((1 + return_pensiun) / (1 + inflasi_pensiun)) - 1
+    st.markdown("---")
 
+    # 3️⃣ Retirement drawdown assumptions & PVAD
+    inflasi_pensiun  = st.number_input("Asumsi Inflasi Saat Pensiun (p.a)",      value=0.0) / 100
+    return_pensiun   = st.number_input("Return Investasi Saat Pensiun (p.a)",   value=0.0) / 100
+    real_return      = (1 + return_pensiun) / (1 + inflasi_pensiun) - 1
+    st.markdown(f"📉 *Tingkat pengembalian riil selama pensiun:* **{real_return*100:.2f}%**")
+
+    # PVAD: capital needed at retirement start
     if real_return == 0:
         pvad = pengeluaran_pensiun_fv * masa_pensiun
     else:
         pvad = pengeluaran_pensiun_fv * (((1 - (1 + real_return) ** -masa_pensiun) / real_return) * (1 + real_return))
 
     st.markdown(
-        f"<div style='border:3px solid #d32f2f;padding:20px;border-radius:10px;margin:20px 0;background-color:#ffecec;'>"
-        f"<h4>📦 Jumlah total kapital yang dibutuhkan saat pensiun:</h4>"
+        f"<div style='border:3px solid #d32f2f; padding:20px; border-radius:10px; margin-top:20px; background-color:#ffecec;'>"
+        f"<h4>📦 Jumlah total kapital yang dibutuhkan di awal pensiun:</h4>"
         f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
-        f"<p><i>Anda perlu menyiapkan dana ini untuk mempertahankan gaya hidup pensiun Anda selama {masa_pensiun} tahun.</i></p>"
+        f"<p><i>Untuk menopang pengeluaran tahunan sebesar Rp{pengeluaran_pensiun_fv:,.0f} selama {masa_pensiun} tahun.</i></p>"
         f"</div>",
         unsafe_allow_html=True
     )
