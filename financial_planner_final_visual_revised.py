@@ -147,7 +147,7 @@ with tab2:
 
     # use inflation as the only “discount” rate
     discount_rate = -inflasi_pensiun
-    st.markdown(f"📉 Tingkat diskon (inflasi) saat pensiun: **{discount_rate*100:.2f}%**")
+    st.markdown(f"📉 Tingkat diskon (inflasi) tahunan saat masa pensiun: **{discount_rate*100:.2f}%**")
 
     # compute PVAD
     if discount_rate == 0:
