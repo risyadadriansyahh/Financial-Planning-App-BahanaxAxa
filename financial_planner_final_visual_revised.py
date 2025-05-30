@@ -170,7 +170,6 @@ with tab2:
         f"border-radius:8px; background-color:#ffecec; margin-top:20px;'>"
         f"<h4>📦 Jumlah total kapital yang dibutuhkan di awal pensiun:</h4>"
         f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
-        f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
         f"<p><i>Untuk menopang pengeluaran gaya hidup tahunan sebesar Rp{pengeluaran_pensiun_fv:,.0f} selama {masa_pensiun} tahun masa pensiun.</i></p>"
         f"</div>",
         unsafe_allow_html=True
