@@ -129,7 +129,7 @@ with tab2:
         value=6_250_000, step=100_000
     )
     pengeluaran_tahunan = pengeluaran_bulanan * 12
-    st.markdown(f"📌 *Pengeluaran tahunan saat ini:* **Rp{pengeluaran_tahunan:,.0f}**")
+    st.markdown(f"📌 *Pengeluaran Lifestyle Tahunan Saat Ini:* **Rp{pengeluaran_tahunan:,.0f}**")
 
     # % of today’s expense desired in retirement
     persentase_pensiun = st.number_input(
