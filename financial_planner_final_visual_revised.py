@@ -128,7 +128,7 @@ with tab2:
         step=100_000
     )
     pengeluaran_tahunan = pengeluaran_bulanan * 12
-    st.markdown(f"📌 Pengeluaran Tahunan Saat Ini: **Rp{pengeluaran_tahunan:,.0f}**")
+    st.markdown(f"📌 Pengeluaran Lifestlye Tahunan Saat Ini: **Rp{pengeluaran_tahunan:,.0f}**")
 
     persentase_pensiun = st.number_input(
         "Persentase Pengeluaran Saat Pensiun (%)",
@@ -139,8 +139,8 @@ with tab2:
     pengeluaran_pensiun_pv = pengeluaran_tahunan * persentase_pensiun
     pengeluaran_pensiun_fv = pengeluaran_pensiun_pv * ((1 + inflasi) ** masa_akumulasi)
 
-    st.markdown(f"📌 Pengeluaran Tahunan di Masa Pensiun (PV): **Rp{pengeluaran_pensiun_pv:,.0f}**")
-    st.markdown(f"📈 Nilai Masa Depan Pengeluaran (FV): **Rp{pengeluaran_pensiun_fv:,.0f}**")
+    st.markdown(f"📌 Pengeluaran Lifestyle Tahunan di Masa Pensiun (PV): **Rp{pengeluaran_pensiun_pv:,.0f}**")
+    st.markdown(f"📈 Nilai Masa Depan Pengeluaran Lifestyle (FV): **Rp{pengeluaran_pensiun_fv:,.0f}**")
 
     st.markdown("---")
 
@@ -170,6 +170,8 @@ with tab2:
         f"border-radius:8px; background-color:#ffecec; margin-top:20px;'>"
         f"<h4>📦 Jumlah total kapital yang dibutuhkan di awal pensiun:</h4>"
         f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
+        f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
+        f"<p><i>Untuk menopang pengeluaran gaya hidup tahunan sebesar Rp{pengeluaran_pensiun_fv:,.0f} selama {masa_pensiun} tahun masa pensiun.</i></p>"
         f"</div>",
         unsafe_allow_html=True
     )
@@ -180,33 +182,50 @@ with tab2:
 with tab3:
     st.markdown("## 💡 Strategi Investasi untuk Tutup Defisit")
 
+    # 1️⃣ Allow user to add as many asset classes as they like:
     asset_data = {
-        "Aset Investasi": ["Tabungan", "Deposito", "Reksa Dana Pasar Uang", "Reksa Dana Pendapatan Tetap", "Reksa Dana Saham", "Emas"],
-        "Imbal Hasil (p.a)": [0.5, 2.0, 5.0, 6.0, 9.0, 8.0],
+        "Aset Investasi": [
+            "Tabungan", "Deposito", 
+            "Reksa Dana Pasar Uang", "Reksa Dana Pendapatan Tetap", 
+            "Reksa Dana Saham", "Emas"
+        ],
+        "Imbal Hasil (% p.a)": [0.5, 2.0, 5.0, 6.0, 9.0, 8.0],
         "Nominal Saat Ini": [100_000_000, 0, 0, 50_000_000, 0, 100_000_000]
     }
-    df_assets = st.data_editor(pd.DataFrame(asset_data), num_rows="fixed")
+    df_assets = st.data_editor(
+        pd.DataFrame(asset_data), 
+        num_rows="dynamic",       # ← users can add/remove rows
+        use_container_width=True  # ← stretch editor full width
+    )
 
+    # 2️⃣ Project each to retirement
     df_assets["Proyeksi Saat Pensiun"] = df_assets.apply(
-        lambda row: row["Nominal Saat Ini"] * ((1 + row["Imbal Hasil (p.a)"] / 100) ** masa_akumulasi),
+        lambda r: r["Nominal Saat Ini"] * ((1 + r["Imbal Hasil (% p.a)"]/100) ** masa_akumulasi),
         axis=1
     )
     total_fv = df_assets["Proyeksi Saat Pensiun"].sum()
 
-    st.dataframe(df_assets.style.format({
-        "Nominal Saat Ini": "Rp{:,.0f}",
-        "Proyeksi Saat Pensiun": "Rp{:,.0f}"
-    }))
+    st.dataframe(
+        df_assets.style.format({
+            "Nominal Saat Ini":     "Rp{:,.0f}",
+            "Proyeksi Saat Pensiun": "Rp{:,.0f}",
+            "Imbal Hasil (% p.a)":   "{:.1f}%"
+        }),
+        use_container_width=True
+    )
 
+    # 3️⃣ Compute deficit
     deficit = max(pvad - total_fv, 0)
     st.markdown(
-        f"<div style='border:3px solid #f57c00;padding:20px;border-radius:10px;margin:20px 0;background-color:#fff3e0;'>"
+        f"<div style='border:3px solid #f57c00;padding:20px;border-radius:10px;"
+        f"background-color:#fff3e0;margin:20px 0;'>"
         f"<h4>❗ Defisit yang harus dialokasikan:</h4>"
         f"<h2 style='color:#f57c00;'>Rp{deficit:,.0f}</h2>"
         f"</div>",
         unsafe_allow_html=True
     )
 
+    # 4️⃣ Allow dynamic simulation of monthly top-ups
     st.markdown("### 📊 Simulasi Alokasi Investasi Bulanan")
 
     alloc_data = {
@@ -214,20 +233,26 @@ with tab3:
         "Imbal Hasil (%)": [2.0, 5.0, 6.0, 9.0, 8.0],
         "Alokasi (%)": [20, 20, 20, 20, 20]
     }
-    df_alloc = st.data_editor(pd.DataFrame(alloc_data), num_rows="fixed")
+    df_alloc = st.data_editor(
+        pd.DataFrame(alloc_data),
+        num_rows="dynamic",       # ← users can add/remove allocation rows
+        use_container_width=True
+    )
 
     if df_alloc["Alokasi (%)"].sum() != 100:
         st.error("❌ Total alokasi harus 100%")
     else:
         weighted_return = np.dot(df_alloc["Imbal Hasil (%)"], df_alloc["Alokasi (%)"]) / 100
-        r_monthly = weighted_return / 100 / 12
+        r_monthly = weighted_return/100/12
         n_months = masa_akumulasi * 12
-        pmt = deficit / n_months if r_monthly == 0 else (deficit * r_monthly) / (((1 + r_monthly) ** n_months - 1) * (1 + r_monthly))
+        pmt = (deficit * r_monthly) / (((1 + r_monthly) ** n_months - 1)*(1 + r_monthly)) if r_monthly else deficit/n_months
 
         st.markdown(
-            f"<div style='border:3px solid #388e3c;padding:20px;border-radius:10px;margin:20px 0;background-color:#e8f5e9;'>"
-            f"<h4>✅ Dengan return gabungan {weighted_return:.2f}%, Anda perlu menabung:</h4>"
+            f"<div style='border:3px solid #388e3c;padding:20px;border-radius:10px;"
+            f"background-color:#e8f5e9;margin:20px 0;'>"
+            f"<h4>✅ Dengan return gabungan {weighted_return:.2f}%:</h4>"
             f"<h2 style='color:#388e3c;'>Rp{pmt:,.0f} / bulan</h2>"
             f"</div>",
             unsafe_allow_html=True
         )
+
