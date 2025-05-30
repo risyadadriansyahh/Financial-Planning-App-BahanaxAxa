@@ -137,7 +137,7 @@ with tab2:
         value=70, min_value=0, max_value=100
     ) / 100
 
-    inflasi = st.number_input("Asumsi Inflasi hingga Pensiun (p.a)", value=5.0) / 100
+    inflasi = st.number_input("Asumsi Inflasi hingga Pensiun (% p.a)", value=5.0) / 100
 
     # PV = expense desired today
     pengeluaran_pensiun_pv = pengeluaran_tahunan * persentase_pensiun  
@@ -151,7 +151,7 @@ with tab2:
 
 # 3️⃣ Retirement draw-down assumptions & PVAD (inflation only)
 inflasi_pensiun = st.number_input(
-    "Asumsi Inflasi Saat Pensiun (p.a)",
+    "Asumsi Inflasi Saat Pensiun (% p.a)",
     value=5.0,
     step=0.1
 ) / 100
