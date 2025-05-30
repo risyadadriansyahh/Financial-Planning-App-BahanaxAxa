@@ -101,7 +101,7 @@ with tab2:
     # 1️⃣ Age inputs
     col1, col2, col3 = st.columns(3)
     usia_skrg    = col1.number_input("Usia saat ini", value=34,   min_value=18,  max_value=100)
-    usia_pensiun = col2.number_input("Usia pensiun",   value=55,   min_value=usia_skrg+1, max_value=120)
+    usia_pensiun = col2.number_input("Target Usia pensiun",   value=55,   min_value=usia_skrg+1, max_value=120)
     usia_meninggal = col3.number_input("Harapan hidup", value=75,  min_value=usia_pensiun+1, max_value=120)
 
     # Calculate periods
