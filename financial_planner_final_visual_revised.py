@@ -116,9 +116,9 @@ with tab2:
     masa_pensiun   = usia_meninggal - usia_pensiun  # years in retirement
 
     # Display periods side-by-side
-    col4, col5 = st.columns(2)
+    col4, col6 = st.columns(2)
     col4.markdown(f"🧓 Masa pensiun: **{masa_pensiun} tahun**")
-    col5.markdown(f"📈 Masa akumulasi: **{masa_akumulasi} tahun**")
+    col6.markdown(f"📈 Masa akumulasi: **{masa_akumulasi} tahun**")
 
     st.markdown("---")
 
@@ -171,7 +171,7 @@ st.markdown(
     f"<div style='border:3px solid #d32f2f; padding:20px; border-radius:8px; background-color:#ffecec; margin-top:20px;'>"
     f"<h4>📦 Jumlah total kapital yang dibutuhkan di awal pensiun:</h4>"
     f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
-    f"<p><i>Untuk menopang pengeluaran gaya hidup tahunan sebesar Rp{pengeluaran_pensiun_fv:,.0f} selama {masa_pensiun} tahun.</i></p>"
+    f"<p><i>Untuk menopang pengeluaran gaya hidup tahunan sebesar Rp{pengeluaran_pensiun_fv:,.0f} selama {masa_pensiun} tahun masa pensiun.</i></p>"
     f"</div>",
     unsafe_allow_html=True
     )
