@@ -118,7 +118,7 @@ with tab2:
     # Display periods side-by-side
     col4, col9 = st.columns(2)
     col4.markdown(f"🧓 Masa pensiun: **{masa_pensiun} tahun**")
-    col6.markdown(f"📈 Masa akumulasi: **{masa_akumulasi} tahun**")
+    col9.markdown(f"📈 Masa akumulasi: **{masa_akumulasi} tahun**")
 
     st.markdown("---")
 
