@@ -116,7 +116,7 @@ with tab2:
     masa_pensiun   = usia_meninggal - usia_pensiun  # years in retirement
 
     # Display periods side-by-side
-    col4, col6 = st.columns(2)
+    col4, col9 = st.columns(2)
     col4.markdown(f"🧓 Masa pensiun: **{masa_pensiun} tahun**")
     col6.markdown(f"📈 Masa akumulasi: **{masa_akumulasi} tahun**")
 
