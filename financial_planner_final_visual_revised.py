@@ -103,44 +103,54 @@ with tab1:
 with tab2:
     st.markdown("## 🎯 Target Dana Pensiun")
 
+    # Input: Age profile
     col1, col2, col3 = st.columns(3)
     usia_skrg = col1.number_input("Usia saat ini", value=34)
     usia_pensiun = col2.number_input("Usia pensiun", value=55)
     usia_meninggal = col3.number_input("Harapan hidup", value=75)
-    
+
     masa_pensiun = usia_meninggal - usia_pensiun
     masa_akumulasi = usia_pensiun - usia_skrg
-    
+
     col4, col5 = st.columns(2)
     col4.markdown(f"🧓 Masa pensiun: **{masa_pensiun} tahun**")
     col5.markdown(f"📈 Masa akumulasi: **{masa_akumulasi} tahun**")
-    
-    # User-defined expected monthly expense in retirement
-    target_pengeluaran = st.number_input("Target Pengeluaran Bulanan Saat Pensiun (IDR)", value=int(pengeluaran_bulanan_input * 0.7))
-    
-    # Display the annual equivalent
-    pengeluaran_tahunan_pensiun = target_pengeluaran * 12
-    st.markdown(f"📅 Target Pengeluaran Tahunan Saat Pensiun: **Rp{pengeluaran_tahunan_pensiun:,.0f}**")
-    
-    # Inflation-adjusted future value of annual expense
-    inflasi = st.number_input("Asumsi Inflasi (p.a)", value=5.0) / 100
-    fv_pengeluaran = pengeluaran_tahunan_pensiun * ((1 + inflasi) ** masa_akumulasi)
-    st.markdown(f"### 📈 Nilai masa depan target pengeluaran pensiun (FV): **Rp{fv_pengeluaran:,.0f}**")
 
-    inflasi_pensiun = st.number_input("Inflasi saat masa pensiun (p.a)", value=5.0) / 100
-    return_pensiun = st.number_input("Return saat masa pensiun (p.a)", value=0.0) / 100
+    # Input: Monthly retirement spending target
+    target_pengeluaran_bulanan = st.number_input(
+        "Target Pengeluaran Bulanan Saat Pensiun (IDR)",
+        value=int(pengeluaran_bulanan_input * 0.7),
+        step=100_000
+    )
+
+    # Show annual version
+    pengeluaran_tahunan_pensiun = target_pengeluaran_bulanan * 12
+    st.markdown(f"📅 Target Pengeluaran Tahunan Saat Pensiun: **Rp{pengeluaran_tahunan_pensiun:,.0f}**")
+
+    # Future value of first-year retirement expense
+    inflasi = st.number_input("Asumsi Inflasi Hingga Pensiun (p.a)", value=5.0) / 100
+    pengeluaran_tahun_pertama_pensiun = pengeluaran_tahunan_pensiun * ((1 + inflasi) ** masa_akumulasi)
+
+    st.markdown(f"### 📈 Pengeluaran Tahun Pertama Saat Pensiun (FV): **Rp{pengeluaran_tahun_pertama_pensiun:,.0f}**")
+
+    # Input: Post-retirement assumptions
+    inflasi_pensiun = st.number_input("Asumsi Inflasi Saat Pensiun (p.a)", value=5.0) / 100
+    return_pensiun = st.number_input("Return Investasi Saat Pensiun (p.a)", value=0.0) / 100
+
+    # Calculate real return
     real_return = ((1 + return_pensiun) / (1 + inflasi_pensiun)) - 1
 
+    # Capital needed at start of retirement
     if real_return == 0:
-        pvad = fv_pengeluaran * masa_pensiun
+        pvad = pengeluaran_tahun_pertama_pensiun * masa_pensiun
     else:
-        pvad = fv_pengeluaran * (((1 - (1 + real_return) ** -masa_pensiun) / real_return) * (1 + real_return))
+        pvad = pengeluaran_tahun_pertama_pensiun * (((1 - (1 + real_return) ** -masa_pensiun) / real_return) * (1 + real_return))
 
     st.markdown(
         f"<div style='border:3px solid #d32f2f;padding:20px;border-radius:10px;margin:20px 0;background-color:#ffecec;'>"
-        f"<h4>📦 Jumlah total kapital yang dibutuhkan saat masa pensiun:</h4>"
+        f"<h4>📦 Jumlah total kapital yang dibutuhkan saat pensiun:</h4>"
         f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
-        f"<p><i>Anda perlu menyiapkan dana ini untuk mempertahankan gaya hidup pensiun Anda.</i></p>"
+        f"<p><i>Anda perlu menyiapkan dana ini pada usia pensiun untuk mempertahankan gaya hidup Anda selama masa pensiun.</i></p>"
         f"</div>",
         unsafe_allow_html=True
     )
