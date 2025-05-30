@@ -213,7 +213,7 @@ with tab3:
     st.markdown(
         f"<div style='border:3px solid #f57c00; padding:20px; border-radius:10px; "
         f"background-color:#fff3e0; margin:20px 0;'>"
-        f"<h4>❗ Defisit Kapital Yang Harus Dialokasikan:</h4>"
+        f"<h4>❗ Defisit Kapital Yang Harus Dialokasikan Untuk Memenuhi Pengeluaran Lifestyle Setelah Pensiun:</h4>"
         f"<h2 style='color:#f57c00;'>Rp{deficit:,.0f}</h2>"
         f"</div>",
         unsafe_allow_html=True
