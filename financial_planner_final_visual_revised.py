@@ -98,44 +98,81 @@ with tab1:
         st.pyplot(fig)
 
 # ----------------------
+# ----------------------
 # Tab 2: Retirement Needs Projection
 # ----------------------
 with tab2:
     st.markdown("## 🎯 Target Dana Pensiun")
 
-    # … your existing inputs and PV/FV code …
+    # 1️⃣ Age inputs
+    col1, col2, col3 = st.columns(3)
+    usia_skrg    = col1.number_input("Usia saat ini", value=34,   min_value=18,  max_value=100)
+    usia_pensiun = col2.number_input("Usia pensiun",   value=55,   min_value=usia_skrg+1, max_value=120)
+    usia_meninggal = col3.number_input("Harapan hidup", value=75,  min_value=usia_pensiun+1, max_value=120)
+
+    # Calculate periods
+    masa_akumulasi = usia_pensiun - usia_skrg
+    masa_pensiun   = usia_meninggal - usia_pensiun
+
+    # Display them
+    col4, col5 = st.columns(2)
+    col4.markdown(f"🧓 Masa pensiun: **{masa_pensiun} tahun**")
+    col5.markdown(f"📈 Masa akumulasi: **{masa_akumulasi} tahun**")
 
     st.markdown("---")
 
-    # 3️⃣ Retirement draw-down assumptions & PVAD (inflation only)
+    # 2️⃣ Expense & PV/FV
+    pengeluaran_bulanan = st.number_input(
+        "Pengeluaran Lifestyle Bulanan Saat Ini (IDR)",
+        value=6_250_000,
+        step=100_000
+    )
+    pengeluaran_tahunan = pengeluaran_bulanan * 12
+    st.markdown(f"📌 Pengeluaran Tahunan Saat Ini: **Rp{pengeluaran_tahunan:,.0f}**")
+
+    persentase_pensiun = st.number_input(
+        "Persentase Pengeluaran Saat Pensiun (%)",
+        value=70, min_value=0, max_value=100
+    ) / 100
+    inflasi = st.number_input("Asumsi Inflasi hingga Pensiun (p.a)", value=5.0) / 100
+
+    pengeluaran_pensiun_pv = pengeluaran_tahunan * persentase_pensiun
+    pengeluaran_pensiun_fv = pengeluaran_pensiun_pv * ((1 + inflasi) ** masa_akumulasi)
+
+    st.markdown(f"📌 Pengeluaran Tahunan di Masa Pensiun (PV): **Rp{pengeluaran_pensiun_pv:,.0f}**")
+    st.markdown(f"📈 Nilai Masa Depan Pengeluaran (FV): **Rp{pengeluaran_pensiun_fv:,.0f}**")
+
+    st.markdown("---")
+
+    # 3️⃣ Draw‐down & PVAD (inflation only)
     inflasi_pensiun = st.number_input(
         "Asumsi Inflasi Saat Pensiun (% p.a)",
         value=5.0,
         step=0.1
     ) / 100
 
-    # Use inflation as negative growth (all purchasing power erosion)
+    # use inflation as the only “discount” rate
     discount_rate = -inflasi_pensiun
-    st.markdown(f"📉 *Tingkat penurunan nilai uang (diskon) selama pensiun:* **{discount_rate*100:.2f}%**")
+    st.markdown(f"📉 Tingkat diskon (inflasi) saat pensiun: **{discount_rate*100:.2f}%**")
 
-    # PVAD: capital needed at retirement start, annuity-due with rate=discount_rate
+    # compute PVAD
     if discount_rate == 0:
         pvad = pengeluaran_pensiun_fv * masa_pensiun
     else:
-        annuity_due_factor = ((1 - (1 + discount_rate) ** -masa_pensiun) / discount_rate) * (1 + discount_rate)
+        annuity_due_factor = (
+            (1 - (1 + discount_rate) ** -masa_pensiun)
+            / discount_rate
+        ) * (1 + discount_rate)
         pvad = pengeluaran_pensiun_fv * annuity_due_factor
 
     st.markdown(
-        f"<div style='border:3px solid #d32f2f; padding:20px; border-radius:8px; "
-        f"background-color:#ffecec; margin-top:20px;'>"
+        f"<div style='border:3px solid #d32f2f; padding:20px; "
+        f"border-radius:8px; background-color:#ffecec; margin-top:20px;'>"
         f"<h4>📦 Jumlah total kapital yang dibutuhkan di awal pensiun:</h4>"
         f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
-        f"<p><i>Untuk menopang pengeluaran gaya hidup tahunan sebesar "
-        f"Rp{pengeluaran_pensiun_fv:,.0f} selama {masa_pensiun} tahun masa pensiun.</i></p>"
         f"</div>",
         unsafe_allow_html=True
     )
-
 
 # ----------------------
 # Tab 3: Investment Strategy
