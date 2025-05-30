@@ -197,7 +197,7 @@ with tab3:
     st.markdown("### 📊 Simulasi Alokasi Investasi Bulanan")
 
     alloc_data = {
-        "Aset": ["Deposito", "Reksa Dana Pasar Uang, "Reksa Dana Pendapatan Tetap", "Reksa Dana Saham", "Emas"],
+        "Aset": ["Deposito", "Reksa Dana Pasar Uang", "Reksa Dana Pendapatan Tetap", "Reksa Dana Saham", "Emas"],
         "Imbal Hasil (%)": [2.0, 5.0, 6.0, 9.0, 8.0],
         "Alokasi (%)": [20, 20, 20, 20, 20]
     }
