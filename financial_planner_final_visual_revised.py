@@ -149,26 +149,32 @@ with tab2:
 
     st.markdown("---")
 
-    # 3️⃣ Retirement drawdown assumptions & PVAD
-    inflasi_pensiun  = st.number_input("Asumsi Inflasi Saat Pensiun (p.a)",      value=0.0) / 100
-    return_pensiun   = st.number_input("Return Investasi Saat Pensiun (p.a)",   value=0.0) / 100
-    real_return      = (1 + return_pensiun) / (1 + inflasi_pensiun) - 1
-    st.markdown(f"📉 *Tingkat pengembalian riil selama pensiun:* **{real_return*100:.2f}%**")
+# 3️⃣ Retirement draw-down assumptions & PVAD (inflation only)
+inflasi_pensiun = st.number_input(
+    "Asumsi Inflasi Saat Pensiun (p.a)",
+    value=5.0,
+    step=0.1
+) / 100
 
-    # PVAD: capital needed at retirement start
-    if real_return == 0:
-        pvad = pengeluaran_pensiun_fv * masa_pensiun
-    else:
-        pvad = pengeluaran_pensiun_fv * (((1 - (1 + real_return) ** -masa_pensiun) / real_return) * (1 + real_return))
+# Use inflation as negative growth (all purchasing power erosion, no real return)
+discount_rate = -inflasi_pensiun
+st.markdown(f"📉 *Tingkat penurunan nilai uang (diskon) selama pensiun:* **{discount_rate*100:.2f}%**")
 
-    st.markdown(
-        f"<div style='border:3px solid #d32f2f; padding:20px; border-radius:10px; margin-top:20px; background-color:#ffecec;'>"
-        f"<h4>📦 Jumlah total kapital yang dibutuhkan di awal pensiun:</h4>"
-        f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
-        f"<p><i>Untuk menopang pengeluaran tahunan sebesar Rp{pengeluaran_pensiun_fv:,.0f} selama {masa_pensiun} tahun.</i></p>"
-        f"</div>",
-        unsafe_allow_html=True
-    )
+# PVAD: capital needed at retirement start, annuity-due with rate=discount_rate
+if discount_rate == 0:
+    pvad = pengeluaran_pensiun_fv * masa_pensiun
+else:
+    annuity_due_factor = ((1 - (1 + discount_rate) ** -masa_pensiun) / discount_rate) * (1 + discount_rate)
+    pvad = pengeluaran_pensiun_fv * annuity_due_factor
+
+st.markdown(
+    f"<div style='border:3px solid #d32f2f; padding:20px; border-radius:8px; background-color:#ffecec; margin-top:20px;'>"
+    f"<h4>📦 Jumlah total kapital yang dibutuhkan di awal pensiun:</h4>"
+    f"<h2 style='color:#d32f2f;'>Rp{pvad:,.0f}</h2>"
+    f"<p><i>Mengasumsikan tidak ada pertumbuhan investasi—hanya inflasi {inflasi_pensiun*100:.2f}% per tahun.</i></p>"
+    f"</div>",
+    unsafe_allow_html=True
+)
 
 # ----------------------
 # Tab 3: Investment Strategy
