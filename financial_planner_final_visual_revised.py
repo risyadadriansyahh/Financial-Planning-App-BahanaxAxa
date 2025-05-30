@@ -131,7 +131,7 @@ with tab2:
     st.markdown(f"📌 Pengeluaran Lifestlye Tahunan Saat Ini: **Rp{pengeluaran_tahunan:,.0f}**")
 
     persentase_pensiun = st.number_input(
-        "Persentase Pengeluaran Saat Pensiun (%)",
+        "Persentase Pengeluaran Lifestyle Saat Pensiun (%)",
         value=70, min_value=0, max_value=100
     ) / 100
     inflasi = st.number_input("Asumsi Inflasi hingga Pensiun (% p.a)", value=5.0) / 100
@@ -140,7 +140,7 @@ with tab2:
     pengeluaran_pensiun_fv = pengeluaran_pensiun_pv * ((1 + inflasi) ** masa_akumulasi)
 
     st.markdown(f"📌 Pengeluaran Lifestyle Tahunan di Masa Pensiun (PV): **Rp{pengeluaran_pensiun_pv:,.0f}**")
-    st.markdown(f"📈 Nilai Masa Depan Pengeluaran Lifestyle (FV): **Rp{pengeluaran_pensiun_fv:,.0f}**")
+    st.markdown(f"📈 Nilai Masa Depan Pengeluaran Lifestyle Ketika Pensiun (FV): **Rp{pengeluaran_pensiun_fv:,.0f}**")
 
     st.markdown("---")
 
