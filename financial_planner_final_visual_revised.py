@@ -222,13 +222,13 @@ with tab3:
     # 4️⃣ Simulasi Alokasi Investasi Bulanan
     st.markdown("### 📊 Simulasi Alokasi Investasi Bulanan")
     alloc_data = {
-        "Aset":         ["Deposito", "Reksa Dana Pasar Uang", "Reksa Dana Pendapatan Tetap", "Reksa Dana Saham", "Emas"],
+        "Aset": ["Deposito", "Reksa Dana Pasar Uang", "Reksa Dana Pendapatan Tetap", "Reksa Dana Saham", "Emas"],
         "Imbal Hasil (%)": [2.0, 5.0, 6.0, 9.0, 8.0],
-        "Alokasi (%)":  [20, 20, 20, 20, 20],
+        "Alokasi (%)": [20, 20, 20, 20, 20],
     }
     df_alloc = st.data_editor(
         pd.DataFrame(alloc_data),
-        num_rows="dynamic",
+        num_rows="fixed",        # users cannot add/remove rows
         use_container_width=True
     )
 
