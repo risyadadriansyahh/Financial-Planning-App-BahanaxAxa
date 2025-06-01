@@ -176,7 +176,7 @@ with tab3:
     st.markdown("## 💡 Strategi Investasi untuk Tutup Defisit")
 
     # 1️⃣ Asset Investasi Yang Dimiliki Saat Ini
-    st.subheader("📋 Asset Investasi Yang Dimiliki Saat Ini")
+    st.subheader("📋 Aset Investasi Yang Dimiliki Saat Ini")
     asset_data = {
         "Aset Investasi": [
             "Tabungan", "Deposito",
@@ -193,7 +193,7 @@ with tab3:
     )
 
     # 2️⃣ Proyeksi Pertumbuhan Aset sampai Hari Pertama Pensiun
-    st.subheader("📈 Proyeksi Pertumbuhan Aset Sampai Hari Pertama Pensiun")
+    st.subheader("📈 Proyeksi Pertumbuhan Aset Yang Dimiliki Saat Ini Sampai Hari Pertama Pensiun")
     df_assets["Proyeksi Saat Pensiun"] = df_assets.apply(
         lambda r: r["Nominal Saat Ini"] * ((1 + r["Imbal Hasil (% p.a)"]/100) ** masa_akumulasi),
         axis=1
