@@ -128,7 +128,7 @@ with tab2:
         "Persentase Pengeluaran Lifestyle Saat Pensiun (%)",
         value=70, min_value=0, max_value=100
     ) / 100
-    inflasi = st.number_input("Asumsi Inflasi hingga Pensiun (% p.a)", value=5.0) / 100
+    inflasi = st.number_input("Asumsi Inflasi hingga Pensiun (% p.a)", value=3.0) / 100
 
     pengeluaran_pensiun_pv = pengeluaran_tahunan * persentase_pensiun
     pengeluaran_pensiun_fv = pengeluaran_pensiun_pv * ((1 + inflasi) ** masa_akumulasi)
@@ -141,7 +141,7 @@ with tab2:
     # 3️⃣ Draw‐down & PVAD (inflation only)
     inflasi_pensiun = st.number_input(
         "Asumsi Inflasi Saat Pensiun (% p.a)",
-        value=5.0,
+        value=3.0,
         step=0.1
     ) / 100
 
